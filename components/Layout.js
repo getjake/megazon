@@ -1,11 +1,17 @@
-import React from "react";
+import React, {useContext, useEffect} from "react";
 import Head from "next/head";
 import NextLink from "next/link";
-import { AppBar, Toolbar, Typography, Container, Link, CssBaseline, ThemeProvider } from "@mui/material";
+import { AppBar, Toolbar, Typography, Container, Link, CssBaseline, ThemeProvider, Switch } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
+
 import useStyles from "../utils/styles";
+import { Store } from "../utils/Store";
+import Cookies from 'js-cookie'
 
 const Layout = ({ title, description, children }) => {
+  const {state, dispatch} = useContext(Store);
+  const {darkMode } = state;
+  
   const theme = createTheme({
     typography: {
       h1: {
@@ -20,7 +26,7 @@ const Layout = ({ title, description, children }) => {
       },
     },
     palette: {
-      type: "light",
+      mode: darkMode? 'dark': 'light',
       primary: {
         main: "#f0c000",
       },
@@ -30,13 +36,20 @@ const Layout = ({ title, description, children }) => {
     },
   });
   const classes = useStyles();
+
+  const darkModeChangeHandler = () => {
+    dispatch({type: darkMode ? 'DARK_MODE_OFF': 'DARK_MODE_ON'})
+    const newDarkMode = !darkMode
+    Cookies.set('darkMode', newDarkMode? 'ON': 'OFF')
+  }
   return (
     <div>
       <Head>
         <title>{title ? `${title} - Megazon` : `Megazon`}</title>
         {description && <meta name="description" content={description}></meta>}
       </Head>
-
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
 
         <AppBar position="static" className={classes.navBar}>
           <Toolbar>
@@ -47,6 +60,7 @@ const Layout = ({ title, description, children }) => {
             </NextLink>
             <div className={classes.grow}></div>
             <div>
+              <Switch checked={darkMode} onChange={darkModeChangeHandler}></Switch>
               <NextLink href="/cart" passHref>
                 <Link>Cart</Link>
               </NextLink>
@@ -56,8 +70,7 @@ const Layout = ({ title, description, children }) => {
             </div>
           </Toolbar>
         </AppBar>
-        <ThemeProvider theme={theme}>
-        <CssBaseline />
+
         <Container className={classes.main}>{children}</Container>
         <footer>
           <Typography className={classes.footer}>All right reserverd. Magazon.</Typography>
