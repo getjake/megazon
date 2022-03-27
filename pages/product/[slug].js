@@ -1,17 +1,17 @@
 import React from "react";
-import { useRouter } from "next/router";
 import NextLink from "next/link";
 import Image from "next/image";
 import { Grid, Link, List, ListItem, Card, Button, Typography} from "@mui/material";
-import data from "../../utils/data";
+import Product from "../../models/Product"
+import db from '../../utils/db'
 import Layout from "../../components/Layout";
 import useStyles from "../../utils/styles";
 
-const ProductScreen = () => {
+const ProductScreen = (props) => {
+
+  const {product} = props;
+
   const classes = useStyles();
-  const router = useRouter();
-  const { slug } = router.query;
-  const product = data.products.find((a) => a.slug == slug);
 
   if (!product) return <div>Product Not Found</div>;
   return (
@@ -86,3 +86,17 @@ const ProductScreen = () => {
 };
 
 export default ProductScreen;
+
+export async function getServerSideProps(context) {
+  const {params} = context;
+  const {slug} = params
+
+  await db.connect()
+  const product = await Product.findOne({slug}).lean()
+  await db.disconnect()
+  return {
+    props: {
+      product: db.convertDocToObj(product)
+    }
+  }
+}

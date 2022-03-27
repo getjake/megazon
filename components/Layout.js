@@ -1,17 +1,26 @@
-import React, {useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import Head from "next/head";
 import NextLink from "next/link";
-import { AppBar, Toolbar, Typography, Container, Link, CssBaseline, ThemeProvider, Switch } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Container,
+  Link,
+  CssBaseline,
+  ThemeProvider,
+  Switch,
+} from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 
 import useStyles from "../utils/styles";
 import { Store } from "../utils/Store";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 
 const Layout = ({ title, description, children }) => {
-  const {state, dispatch} = useContext(Store);
-  const {darkMode } = state;
-  
+  const { state, dispatch } = useContext(Store);
+  const { darkMode } = state;
+
   const theme = createTheme({
     typography: {
       h1: {
@@ -26,7 +35,7 @@ const Layout = ({ title, description, children }) => {
       },
     },
     palette: {
-      mode: darkMode? 'dark': 'light',
+      mode: darkMode ? "dark" : "light",
       primary: {
         main: "#f0c000",
       },
@@ -38,18 +47,18 @@ const Layout = ({ title, description, children }) => {
   const classes = useStyles();
 
   const darkModeChangeHandler = () => {
-    dispatch({type: darkMode ? 'DARK_MODE_OFF': 'DARK_MODE_ON'})
-    const newDarkMode = !darkMode
-    Cookies.set('darkMode', newDarkMode? 'ON': 'OFF')
-  }
+    dispatch({ type: darkMode ? "DARK_MODE_OFF" : "DARK_MODE_ON" });
+    const newDarkMode = !darkMode;
+    Cookies.set("darkMode", newDarkMode ? "ON" : "OFF");
+  };
   return (
     <div>
-      <Head>
-        <title>{title ? `${title} - Megazon` : `Megazon`}</title>
-        {description && <meta name="description" content={description}></meta>}
-      </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <Head>
+          <title>{title ? `${title} - Megazon` : `Megazon`}</title>
+          {description && <meta name="description" content={description}></meta>}
+        </Head>
 
         <AppBar position="static" className={classes.navBar}>
           <Toolbar>
