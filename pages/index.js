@@ -5,7 +5,6 @@ import NextLink from "next/link";
 import Layout from "../components/Layout";
 import { Grid, Card, CardActionArea, CardMedia, CardContent, CardActions } from "@mui/material";
 import { Button, Typography } from "@mui/material";
-// import data from "../utils/data";
 import db from '../utils/db'
 import Product from '../models/Product'
 

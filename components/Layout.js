@@ -10,7 +10,7 @@ import {
   CssBaseline,
   ThemeProvider,
   Switch,
-  Badge
+  Badge,
 } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 
@@ -73,15 +73,13 @@ const Layout = ({ title, description, children }) => {
               <Switch checked={darkMode} onChange={darkModeChangeHandler}></Switch>
               <NextLink href="/cart" passHref>
                 <Link>
-
-
-                {cart.cartItems.length > 0 ? (
-                  <Badge color='secondary' badgeContent={cart.cartItems.length}>
-                    Cart
-                  </Badge>
-                ): 'Cart'}
-                
-                
+                  {cart.cartItems.length > 0 ? (
+                    <Badge color="secondary" badgeContent={cart.cartItems.length}>
+                      Cart
+                    </Badge>
+                  ) : (
+                    "Cart"
+                  )}
                 </Link>
               </NextLink>
               <NextLink href="/login" passHref>

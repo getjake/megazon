@@ -1,5 +1,7 @@
 import React, {useContext, useEffect} from "react";
 import NextLink from "next/link";
+import {useRouter} from 'next/router'
+
 import Image from "next/image";
 import { Grid, Link, List, ListItem, Card, Button, Typography} from "@mui/material";
 import Product from "../../models/Product"
@@ -10,6 +12,7 @@ import axios from 'axios';
 import {Store} from '../../utils/Store'
 
 const ProductScreen = (props) => {
+  const router = useRouter()
   const {state, dispatch} = useContext(Store)
   const {product} = props;
 
@@ -23,7 +26,8 @@ const ProductScreen = (props) => {
       return;
     } 
     dispatch({type: 'CART_ADD_ITEM', payload: {...product, quantity: 1}})
-  }
+    router.push('/cart')  
+    }
 
   if (!product) return <div>Product Not Found</div>;
   return (
