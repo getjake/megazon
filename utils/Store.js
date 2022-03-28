@@ -28,7 +28,11 @@ function reducer(state, action) {
         [...state.cart.cartItems, newItem]
       Cookies.set('cartItems', JSON.stringify(cartItems)); // quantity not included.
       return { ...state, cart: {...state.cart, cartItems}} // @BUG ? SHOULD I USE [] instead of {} ?
-        
+    case "CART_REMOVE_ITEM": {
+      const cartItems = state.cart.cartItems.filter((item)=> (item._id !== action.payload._id))
+      Cookies.set('cartItems', JSON.stringify(cartItems));
+      return {...state, cart: {cartItems}} // @BUG ? shoud I remove `...state.cart`? it works!
+    }
 
 
     default:
