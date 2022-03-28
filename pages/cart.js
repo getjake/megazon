@@ -21,9 +21,11 @@ import {
   List,
   ListItem,
 } from "@mui/material";
+import { useRouter } from 'next/router';
 import axios from "axios";
 
 const CartScreen = () => {
+  const router = useRouter()
   const { state, dispatch } = useContext(Store);
   const {
     cart: { cartItems },
@@ -41,6 +43,11 @@ const CartScreen = () => {
   const removeItemHandler = (item) => {
     dispatch({type: 'CART_REMOVE_ITEM', payload: item})
   }
+
+  const checkoutHandler = () => {
+    router.push('/shipping')
+  }
+
 
 
   return (
@@ -121,7 +128,7 @@ const CartScreen = () => {
                   </Typography>
                 </ListItem>
                 <ListItem>
-                  <Button variant="contained" color="primary" fullWidth>
+                  <Button variant="contained" color="primary" fullWidth onClick={checkoutHandler}>
                     Check Out
                   </Button>
                 </ListItem>
