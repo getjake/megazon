@@ -20,14 +20,26 @@ const Login = () => {
     }
   }, []);
 
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("")
   const classes = useStyles();
-
+  
   const submitHandler = async (e) => {
     e.preventDefault();
+
+    // check password
+    if(password !== confirmPassword) {
+        alert("Passwords don't match")
+        return
+    }
+
+
+
     try {
-      const { data } = await axios.post("/api/users/login", {
+      const { data } = await axios.post("/api/users/register", {
+        name, 
         email,
         password,
       });
@@ -50,6 +62,16 @@ const Login = () => {
             <TextField
               variant="outlined"
               fullWidth
+              id="name"
+              label="Name"
+              inputProps={{ type: "text" }}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </ListItem>
+          <ListItem>
+            <TextField
+              variant="outlined"
+              fullWidth
               id="email"
               label="Email"
               inputProps={{ type: "email" }}
@@ -67,14 +89,24 @@ const Login = () => {
             />
           </ListItem>
           <ListItem>
+            <TextField
+              variant="outlined"
+              fullWidth
+              id="confirmPassword"
+              label="Confirm Password"
+              inputProps={{ type: "password" }}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </ListItem>
+          <ListItem>
             <Button variant="contained" type="submit" fullWidth color="primary">
-              Login
+              Register
             </Button>
           </ListItem>
           <ListItem>
-            Dont have an account? {"\u00A0"}
-            <NextLink href={`/register?redirect=${redirect || '/'}`} passHref>
-              <Link>Register</Link>
+            Already have an account? {"\u00A0"}
+            <NextLink href={`/login?redirect=${redirect || '/'}`} passHref>
+              <Link>Login</Link>
             </NextLink>
           </ListItem>
         </List>
