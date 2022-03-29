@@ -1,11 +1,29 @@
-import React, {useState} from "react";
+import React, {useState, useContext, useEffect} from "react";
+import { useRouter } from "next/router";
 import axios from 'axios'
 import { List, ListItem, Typography, TextField, Button, Link } from "@mui/material";
 import NextLink from "next/link";
 import Layout from "../components/Layout";
 import useStyles from "../utils/styles";
+import { Store } from "../utils/Store";
+import Cookies from 'js-cookie'
 
 const Login = () => {
+  const router = useRouter()
+  const {redirect} = router.query
+  const {state, dispatch} = useContext(Store)
+  const {userInfo} =state;
+
+  useEffect(() => {
+    if(userInfo) {
+      router.push("/")
+    }
+  }, [])
+
+
+
+
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const classes = useStyles();
@@ -16,7 +34,7 @@ const Login = () => {
       const{data} = await axios.post('/api/users/login', {
         email, password
       })
-      alert('success login')
+      dispatch({type: 'USER_LOGIN', payload: data})
     } catch(error) {
       alert(error.response.data ? error.response.data.message: error.message)
     }
