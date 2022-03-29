@@ -8,7 +8,7 @@ const initialState = {
   cart: {
     cartItems: Cookies.get("cartItems") ? JSON.parse(Cookies.get("cartItems")): [],
   },
-  userInfo: Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo')) : null,
+  userInfo: Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo'))  : null,
 };
 
 // Reducer explained: State: The State Object consists of multiple states. 
