@@ -57,10 +57,10 @@ const Register = () => {
   };
 
   return (
-    <Layout title="Login">
+    <Layout title="Register">
       <form onSubmit={handleSubmit(submitHandler)} className={classes.form}>
         <Typography component="h1" variant="h1">
-          Login
+          Register
         </Typography>
         <List>
           <ListItem>

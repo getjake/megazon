@@ -7,6 +7,7 @@ const initialState = {
   darkMode: Cookies.get("darkMode") === "ON" ? true : false,
   cart: {
     cartItems: Cookies.get("cartItems") ? JSON.parse(Cookies.get("cartItems")): [],
+    shippingAddress: Cookies.get("shippingAddress") ? JSON.parse(Cookies.get("shippingAddress")) : {}
   },
   userInfo: Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo'))  : null,
 };
@@ -28,7 +29,7 @@ function reducer(state, action) {
         : 
         [...state.cart.cartItems, newItem]
       Cookies.set('cartItems', JSON.stringify(cartItems)); // quantity not included.
-      return { ...state, cart: {...state.cart, cartItems}} // @BUG ? SHOULD I USE [] instead of {} ?
+      return { ...state, cart: {...state.cart, cartItems}} 
     case "CART_REMOVE_ITEM": {
       const cartItems = state.cart.cartItems.filter((item)=> (item._id !== action.payload._id))
       Cookies.set('cartItems', JSON.stringify(cartItems));
@@ -36,9 +37,21 @@ function reducer(state, action) {
     }
 
     case 'USER_LOGIN':
+      Cookies.set("userInfo", JSON.stringify(action.payload));
       return {...state, userInfo: action.payload}
     case 'USER_LOGOUT':
+      Cookies.remove('userInfo')
+      Cookies.remove('cartItems')
       return {...state, userInfo: null, cart: {cartItems: []}}
+    case 'SAVE_SHIPPING_ADDRESS': 
+      Cookies.set("shippingAddress", JSON.stringify(action.payload));
+      return {
+        ...state, 
+        cart: {
+          ...state.cart,
+          shippingAddress: action.payload
+        }
+      }
 
     default:
       return state;

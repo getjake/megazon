@@ -42,7 +42,6 @@ const Login = () => {
         password,
       });
       dispatch({ type: "USER_LOGIN", payload: data });
-      Cookies.set("userInfo", data);
       router.push(redirect || "/");
     } catch (error) {
       // alert(error.response.data ? error.response.data.message : error.message);
