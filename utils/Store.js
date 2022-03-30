@@ -43,7 +43,7 @@ function reducer(state, action) {
       Cookies.remove('userInfo')
       Cookies.remove('cartItems')
       return {...state, userInfo: null, cart: {cartItems: []}}
-    case 'SAVE_SHIPPING_ADDRESS': 
+    case 'SAVE_SHIPPING_ADDRESS':
       Cookies.set("shippingAddress", JSON.stringify(action.payload));
       return {
         ...state, 
@@ -51,6 +51,12 @@ function reducer(state, action) {
           ...state.cart,
           shippingAddress: action.payload
         }
+      }
+    case 'SAVE_PAYMENT_METHOD':
+      Cookies.set("paymentMethod", JSON.stringify(action.payload));
+      return {
+        ...state,
+        cart: {...state.card, paymentMethod: action.payload}
       }
 
     default:

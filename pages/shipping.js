@@ -8,7 +8,7 @@ import Layout from "../components/Layout";
 import useStyles from "../utils/styles";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
-import CheckoutWizard from "../components/checkoutWizard";
+import CheckoutWizard from "../components/CheckoutWizard";
 
 const Shipping = () => {
   const {
