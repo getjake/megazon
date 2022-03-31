@@ -7,9 +7,11 @@ const initialState = {
   darkMode: Cookies.get("darkMode") === "ON" ? true : false,
   cart: {
     cartItems: Cookies.get("cartItems") ? JSON.parse(Cookies.get("cartItems")): [],
-    shippingAddress: Cookies.get("shippingAddress") ? JSON.parse(Cookies.get("shippingAddress")) : {}
+    shippingAddress: Cookies.get("shippingAddress") ? JSON.parse(Cookies.get("shippingAddress")) : {},
+    paymentMethod: Cookies.get("paymentMethod") ? Cookies.get("paymentMethod") : '',
   },
   userInfo: Cookies.get('userInfo') ? JSON.parse(Cookies.get('userInfo'))  : null,
+
 };
 
 // Reducer explained: State: The State Object consists of multiple states. 
@@ -53,7 +55,7 @@ function reducer(state, action) {
         }
       }
     case 'SAVE_PAYMENT_METHOD':
-      Cookies.set("paymentMethod", JSON.stringify(action.payload));
+      // Cookies.set("paymentMethod", action.payload); // Single String
       return {
         ...state,
         cart: {...state.card, paymentMethod: action.payload}

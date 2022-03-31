@@ -44,6 +44,7 @@ const Payment = () => {
       enqueueSnackbar("Payment method is required", { variant: "error" });
     } else {
       dispatch({ type: "paymentMethod", payload: paymentMethod });
+      Cookies.set("paymentMethod", paymentMethod);
       router.push("/placeorder");
     }
   };
