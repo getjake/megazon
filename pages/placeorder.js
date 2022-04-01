@@ -151,6 +151,26 @@ const PlaceOrder = () => {
                   <ListItem>
                       <Grid container>
                         <Grid item xs={6}>
+                            <Typography>Shipping Price:</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography align="right">${shippingPrice}</Typography>
+                        </Grid>
+                      </Grid>
+                  </ListItem>
+                  <ListItem>
+                      <Grid container>
+                        <Grid item xs={6}>
+                            <Typography>Tax:</Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography align="right">${taxPrice}</Typography>
+                        </Grid>
+                      </Grid>
+                  </ListItem>
+                  <ListItem>
+                      <Grid container>
+                        <Grid item xs={6}>
                             <Typography><strong>Total:</strong></Typography>
                         </Grid>
                         <Grid item xs={6}>
