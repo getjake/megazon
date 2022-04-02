@@ -38,7 +38,6 @@ const PlaceOrder = () => {
     userInfo,
     cart: { cartItems, shippingAddress, paymentMethod },
   } = state;
-
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
   const itemsPrice = round2(cartItems.reduce((a, c) => a + c.price * c.quantity, 0));
   const shippingPrice = itemsPrice > 200 ? 0 : 15;
@@ -46,6 +45,7 @@ const PlaceOrder = () => {
   const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
 
   const placeOrderHandler = async() => {
+    console.log("activated placeOrderHandler ")
     closeSnackbar()
     try {
       setLoading(true)
@@ -62,13 +62,14 @@ const PlaceOrder = () => {
           authorization: `Bearer ${userInfo.token}`
         }
       })
-      dispatch({type: 'CART_CLEAR'})
-      Cookies.remove('cartItems')
+      
+      dispatch({ type: 'CART_CLEAR' });
+      Cookies.remove('cartItems');
       setLoading(false)
       router.push(`/order/${data._id}`)
     } catch(error) {
       setLoading(false);
-      enqueueSnackbar(getError(err), {variant: 'error'})
+      enqueueSnackbar(getError(error), {variant: 'error'})
     }
   }
 
@@ -83,10 +84,8 @@ const PlaceOrder = () => {
   }, []);
 
 
-
-
   return (
-    <Layout title="Shopping Cart">
+    <Layout title="Place Order">
       <CheckoutWizard activeStep={3} />
       <Typography component="h1" variant="h1">
         Place Order
