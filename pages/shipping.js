@@ -11,7 +11,6 @@ import Cookies from "js-cookie";
 import CheckoutWizard from "../components/CheckoutWizard";
 
 const Shipping = () => {
-  const [showContent, setShowContent] = useState(false)
   const {
     handleSubmit,
     control,
@@ -36,7 +35,6 @@ const Shipping = () => {
     setValue("city", shippingAddress.city);
     setValue("postalCode", shippingAddress.postalCode);
     setValue("country", shippingAddress.country);
-    setShowContent(true)
   }, []);
 
   const classes = useStyles();
@@ -50,7 +48,6 @@ const Shipping = () => {
   };
 
   return (
-    showContent  &&
     <Layout title="Shipping Address">
       <CheckoutWizard activeStep={1} />
         <form onSubmit={handleSubmit(submitHandler)} className={classes.form}>
