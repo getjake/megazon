@@ -8,12 +8,12 @@ const useStyles = makeStyles({
       marginLeft: 10,
     },
   },
-  brand:{
-    fontWeight: 'bold',
-    fontSize: '1.5rem'
+  brand: {
+    fontWeight: "bold",
+    fontSize: "1.5rem",
   },
   grow: {
-    flexGrow: 1 // make space in-between
+    flexGrow: 1, // make space in-between
   },
   main: {
     minHeight: "80vh",
@@ -24,22 +24,25 @@ const useStyles = makeStyles({
   },
   section: {
     marginTop: 10,
-    marginButtom: 10
+    marginButtom: 10,
   },
   form: {
     maxWidth: 800,
-    margin: '0 auto'
+    margin: "0 auto",
   },
   navbarButton: {
-    color: '#ffffff',
-    textTransform: 'initial'
+    color: "#ffffff",
+    textTransform: "initial",
   },
   transparentBackground: {
-    backgroundColor: 'transparent'
+    backgroundColor: "transparent",
   },
   error: {
-    color: '#f04040'
-  }
+    color: "#f04040",
+  },
+  fullWidth: {
+    width: "100%",
+  },
 });
 
 export default useStyles;

@@ -25,8 +25,8 @@ import { useRouter } from "next/router";
 import useStyles from "../../utils/styles";
 import { useSnackbar } from "notistack";
 import { getError } from "../../utils/error";
-import Cookies from "js-cookie";
 import CheckoutWizard from "../../components/CheckoutWizard";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -36,17 +36,26 @@ const reducer = (state, action) => {
       return { ...state, loading: false, order: action.payload, error: "" };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
+    case "PAY_REQUEST":
+      return { ...state, loadingPay: true };
+    case "PAY_SUCCESS":
+      return { ...state, loadingPay: false, successPay: true };
+    case "PAY_FAIL":
+      return { ...state, loadingPay: false, errorPay: action.payload };
+    case "PAY_RESET":
+      return { ...state, loadingPay: false, successPay: false, errorPay: "" };
   }
 };
 
 const Order = ({ params }) => {
   const orderId = params.id;
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const classes = useStyles();
   const router = useRouter();
-  const { state } = useContext(Store); 
+  const { state } = useContext(Store);
   const { userInfo } = state;
 
-  const [{ loading, error, order }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, order, successPay }, dispatch] = useReducer(reducer, {
     loading: true,
     order: {},
     error: "",
@@ -66,7 +75,6 @@ const Order = ({ params }) => {
     deliveredAt,
   } = order;
 
-
   useEffect(() => {
     if (!userInfo) {
       return router.push("/login");
@@ -85,12 +93,71 @@ const Order = ({ params }) => {
       }
     };
 
-    if (!order._id || (order._id && order._id !== orderId)) {
+    if (!order._id || successPay || (order._id && order._id !== orderId)) {
       fetchOrder();
+      if (successPay) {
+        // @DEBUG
+        console.log("successPay is TRUE!!!");
+        dispatch({ type: "PAY_RESET" });
+      }
+    } else {
+      const loadPaypalScript = async () => {
+        const { data: clientId } = await axios.get(`/api/keys/paypal`, {
+          headers: { authorization: `Bearer ${userInfo.token}` },
+        });
+        paypalDispatch({
+          type: "resetOptions",
+          value: {
+            "client-id": clientId,
+            currency: "USD",
+          },
+        });
+        paypalDispatch({ type: "setLoadingStatus", value: "pending" });
+      };
+      loadPaypalScript();
     }
-  }, [order]);
+  }, [order, successPay]);
 
   const { closeSnackbar, enqueueSnackbar } = useSnackbar();
+
+  const createOrder = (data, actions) => {
+    // @DEBUG
+    console.log("CREATE ORDER!!");
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: { value: totalPrice },
+          },
+        ],
+      })
+      .then((orderID) => {
+        return orderID;
+      });
+  };
+
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then(async (details) => {
+      try {
+        dispatch({ type: "PAY_REQUEST" });
+        console.log(details);
+        const { data } = await axios.put(`/api/orders/${order._id}/pay`, details, {
+          headers: { authorization: `Bearer ${userInfo.token}` },
+        });
+        dispatch({ type: "PAY_SUCCESS", payload: data });
+        enqueueSnackbar("Order is paid", { variant: "success" });
+      } catch (error) {
+        dispatch({ type: "PAY_FAIL", payload: getError(error) });
+        enqueueSnackbar(getError(error), { variant: "error" });
+      }
+    });
+  };
+
+  const onError = (err) => {
+    // @DEBUG
+    console.log("ON ERROR!!!");
+    enqueueSnackbar(getError(err), { variant: "error" });
+  };
 
   return (
     <Layout title={`Order ${orderId}`}>
@@ -238,6 +305,22 @@ const Order = ({ params }) => {
                     </Grid>
                   </Grid>
                 </ListItem>
+
+                {!isPaid && (
+                  <ListItem>
+                    {isPending ? (
+                      <CircularProgress />
+                    ) : (
+                      <div className={classes.fullWidth}>
+                        <PayPalButtons
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          onError={onError}
+                        />
+                      </div>
+                    )}
+                  </ListItem>
+                )}
               </List>
             </Card>
           </Grid>
