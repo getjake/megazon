@@ -10,6 +10,7 @@ import { useSnackbar } from "notistack";
 import Layout from "../components/Layout";
 import useStyles from "../utils/styles";
 import { Store } from "../utils/Store";
+import { getError } from "../utils/error";
 
 const Login = () => {
   const {
@@ -44,8 +45,7 @@ const Login = () => {
       dispatch({ type: "USER_LOGIN", payload: data });
       router.push(redirect || "/");
     } catch (error) {
-      // alert(error.response.data ? error.response.data.message : error.message);
-      enqueueSnackbar(error.response.data ? error.response.data.message : error.message, {
+      enqueueSnackbar(getError(error), {
         variant: "error",
       });
     }

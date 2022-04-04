@@ -5,10 +5,11 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { List, ListItem, Typography, TextField, Button, Link } from "@mui/material";
 import NextLink from "next/link";
+import Cookies from "js-cookie";
 import Layout from "../components/Layout";
 import useStyles from "../utils/styles";
 import { Store } from "../utils/Store";
-import Cookies from "js-cookie";
+import { getError } from "../utils/error";
 
 const Register = () => {
   const {
@@ -50,7 +51,7 @@ const Register = () => {
       Cookies.set("userInfo", data);
       router.push(redirect || "/");
     } catch (error) {
-      enqueueSnackbar(err.response.data ? err.response.data.message : err.message, {
+      enqueueSnackbar(getError(error), {
         variant: "error",
       });
     }
@@ -149,7 +150,7 @@ const Register = () => {
                   }
                   {...field}
                 />
-  )}
+              )}
             />
           </ListItem>
 
