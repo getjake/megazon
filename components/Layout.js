@@ -128,6 +128,11 @@ const Layout = ({ title, description, children }) => {
                   >
                     <MenuItem onClick={(e)=> loginMenuCloseHandler(e, '/profile')}>Profile</MenuItem>
                     <MenuItem onClick={(e)=> loginMenuCloseHandler(e, '/order-history')}>Order History</MenuItem>
+                    {
+                      userInfo.isAdmin && (
+                        <MenuItem onClick={(e) => loginMenuCloseHandler(e, '/admin/dashboard')}>Admin Dashboard</MenuItem>
+                      )
+                    }
                     <MenuItem onClick={logoutClickHandler}>Logout</MenuItem>
                   </Menu>
                 </>

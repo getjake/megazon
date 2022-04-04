@@ -1,5 +1,5 @@
 import axios from "axios";
-import dynamic from "next/dynamic";
+import dynamic from "next/dynamic"; // WE DONT USE DYNAMIC ON THIS PAGE
 import { useRouter } from "next/router";
 import NexLink from "next/link";
 import React, { useEffect, useContext } from "react";
@@ -21,7 +21,6 @@ import Layout from "../components/Layout";
 import useStyles from "../utils/styles";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
-import Cookies from "js-cookie";
 
 const Profile = () => {
   const { state, dispatch } = useContext(Store);
