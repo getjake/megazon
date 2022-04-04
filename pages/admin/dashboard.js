@@ -117,7 +117,7 @@ const AdminDashboard = () => {
                     <Grid item md={3}>
                       <Card raised>
                         <CardContent>
-                          <Typography variant="h1">${summary.ordersCount}</Typography>
+                          <Typography variant="h1">{summary.ordersCount}</Typography>
                           <Typography>Orders</Typography>
                         </CardContent>
                         <CardActions>
@@ -133,7 +133,7 @@ const AdminDashboard = () => {
                     <Grid item md={3}>
                       <Card raised>
                         <CardContent>
-                          <Typography variant="h1">${summary.productsCount}</Typography>
+                          <Typography variant="h1">{summary.productsCount}</Typography>
                           <Typography>Products</Typography>
                         </CardContent>
                         <CardActions>
