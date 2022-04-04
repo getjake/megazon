@@ -45,7 +45,6 @@ const PlaceOrder = () => {
   const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
 
   const placeOrderHandler = async() => {
-    console.log("activated placeOrderHandler ")
     closeSnackbar()
     try {
       setLoading(true)
