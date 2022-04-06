@@ -137,7 +137,7 @@ const AdminProduct = () => {
                                 <Button size="small" variant="contained">Details</Button>
                               </NextLink>
                               <NextLink href={`/admin/product/${product._id}`} passHref>
-                                <Button size="small" variant="contained">Details</Button>
+                                <Button size="small" variant="contained">Delete</Button>
                               </NextLink>
                             </TableCell>
                           </TableRow>
