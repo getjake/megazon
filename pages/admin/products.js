@@ -134,10 +134,10 @@ const AdminProduct = () => {
                             </TableCell>
                             <TableCell>
                               <NextLink href={`/admin/product/${product._id}`} passHref>
-                                <Button size="small" variant="contained">Details</Button>
+                                <Button size="small" variant="contained">EDIT</Button>
                               </NextLink>
                               <NextLink href={`/admin/product/${product._id}`} passHref>
-                                <Button size="small" variant="contained">Delete</Button>
+                                <Button size="small" variant="contained">DELETE</Button>
                               </NextLink>
                             </TableCell>
                           </TableRow>
