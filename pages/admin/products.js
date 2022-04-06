@@ -29,7 +29,7 @@ const reducer = (state, action) => {
     case "FETCH_REQUEST":
       return { ...state, loading: true, error: "" };
     case "FETCH_SUCCESS":
-      return { ...state, loading: false, orders: action.payload, error: "" };
+      return { ...state, loading: false, products: action.payload, error: "" };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
@@ -37,15 +37,15 @@ const reducer = (state, action) => {
   }
 };
 
-const AdminOrder = () => {
+const AdminProduct = () => {
   const { state } = useContext(Store);
   const router = useRouter();
   const classes = useStyles();
   const { userInfo } = state;
 
-  const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, products }, dispatch] = useReducer(reducer, {
     loading: true,
-    orders: [],
+    products: [],
     error: "",
   });
 
@@ -56,7 +56,7 @@ const AdminOrder = () => {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/admin/orders`, {
+        const { data } = await axios.get(`/api/admin/products`, {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
@@ -68,7 +68,7 @@ const AdminOrder = () => {
   }, []);
 
   return (
-    <Layout title="Orders">
+    <Layout title="Products">
       <Grid container spacing={1}>
         <Grid item md={3} xs={12}>
           <Card className={classes.section}>
@@ -79,12 +79,12 @@ const AdminOrder = () => {
                 </ListItem>
               </NextLink>
               <NextLink href="/admin/orders" passHref>
-                <ListItem selected button component="a">
+                <ListItem button component="a">
                   <ListItemText primary="Orders"></ListItemText>
                 </ListItem>
               </NextLink>
               <NextLink href="/admin/products" passHref>
-                <ListItem button component="a">
+                <ListItem selected button component="a">
                   <ListItemText primary="Products"></ListItemText>
                 </ListItem>
               </NextLink>
@@ -96,7 +96,7 @@ const AdminOrder = () => {
             <List>
               <ListItem>
                 <Typography component="h1" variant="h1">
-                  Orders
+                  Products
                 </Typography>
               </ListItem>
 
@@ -111,32 +111,33 @@ const AdminOrder = () => {
                       <TableHead>
                         <TableRow>
                           <TableCell>ID</TableCell>
-                          <TableCell>USER</TableCell>
-                          <TableCell>DATE</TableCell>
-                          <TableCell>TOTAL</TableCell>
-                          <TableCell>PAID</TableCell>
-                          <TableCell>DELIVERED</TableCell>
+                          <TableCell>NAME</TableCell>
+                          <TableCell>PRICE</TableCell>
+                          <TableCell>CATEGORY</TableCell>
+                          <TableCell>COUNT IN STOCK</TableCell>
+                          <TableCell>RATING</TableCell>
                           <TableCell>ACTION</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {orders.map((order) => (
-                          <TableRow key={order._id}>
-                            <TableCell>{order._id.substring(20, 24)}</TableCell>
-                            <TableCell>{order.user ? order.user.name : "DELETED USER"}</TableCell>
-                            <TableCell>{order.createdAt}</TableCell>
-                            <TableCell>${order.totalPrice}</TableCell>
+                        {products.map((product) => (
+                          <TableRow key={product._id}>
+                            <TableCell>{product._id.substring(20, 24)}</TableCell>
+                            <TableCell>{product.name}</TableCell>
+                            <TableCell>${product.price}</TableCell>
+                            <TableCell>${product.category}</TableCell>
                             <TableCell>
-                              {order.isPaid ? `paid at ${order.paidAt}` : "not paid"}
+                              {product.countInStock}
                             </TableCell>
                             <TableCell>
-                              {order.isDelivered
-                                ? `delivered at ${order.deliveredAt}`
-                                : "not delivered"}
+                              {product.rating}
                             </TableCell>
                             <TableCell>
-                              <NextLink href={`/order/${order._id}`} passHref>
-                                <Button variant="contained">Details</Button>
+                              <NextLink href={`/admin/product/${product._id}`} passHref>
+                                <Button size="small" variant="contained">Details</Button>
+                              </NextLink>
+                              <NextLink href={`/admin/product/${product._id}`} passHref>
+                                <Button size="small" variant="contained">Details</Button>
                               </NextLink>
                             </TableCell>
                           </TableRow>
@@ -154,4 +155,4 @@ const AdminOrder = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(AdminOrder), { ssr: false });
+export default dynamic(() => Promise.resolve(AdminProduct), { ssr: false });
