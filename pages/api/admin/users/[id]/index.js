@@ -2,7 +2,6 @@ import nc from 'next-connect';
 import { isAdmin, isAuth } from '../../../../../utils/auth';
 import User from '../../../../../models/User';
 import db from '../../../../../utils/db';
-import bcrypt from "bcryptjs";
 
 const handler = nc();
 handler.use(isAuth, isAdmin);
@@ -14,14 +13,13 @@ handler.get(async (req, res) => {
   res.send(user);
 });
 
+// Change user
 handler.put(async (req, res) => {
     await db.connect();
     const user = await User.findById(req.query.id);
     if (user) {
       user.name = req.body.name;
-      user.email = req.body.email
-      user.isAdmin = req.body.isAdmin
-      user.password = bcrypt.hashSync(req.body.password)
+      user.isAdmin = Boolean(req.body.isAdmin)
       await user.save();
       await db.disconnect();
       res.send({ message: 'User Updated Successfully' });
