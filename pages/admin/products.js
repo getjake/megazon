@@ -23,6 +23,7 @@ import { useSnackbar } from "notistack";
 import { getError } from "../../utils/error";
 import { Store } from "../../utils/Store";
 import Layout from "../../components/Layout";
+import AdminLeftPanel from "../../components/AdminLeftPanel";
 import useStyles from "../../utils/styles";
 
 const reducer = (state, action) => {
@@ -132,25 +133,7 @@ const AdminProduct = () => {
     <Layout title="Products">
       <Grid container spacing={1}>
         <Grid item md={3} xs={12}>
-          <Card className={classes.section}>
-            <List>
-              <NextLink href="/admin/dashboard" passHref>
-                <ListItem button component="a">
-                  <ListItemText primary="Admin Dashboard"></ListItemText>
-                </ListItem>
-              </NextLink>
-              <NextLink href="/admin/orders" passHref>
-                <ListItem button component="a">
-                  <ListItemText primary="Orders"></ListItemText>
-                </ListItem>
-              </NextLink>
-              <NextLink href="/admin/products" passHref>
-                <ListItem selected button component="a">
-                  <ListItemText primary="Products"></ListItemText>
-                </ListItem>
-              </NextLink>
-            </List>
-          </Card>
+        <AdminLeftPanel selectedTarget="SELECT_PRODUCTS" />
         </Grid>
         <Grid item md={9} xs={12}>
           <Card className={classes.section}>

@@ -22,6 +22,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement);
 import { getError } from "../../utils/error";
 import { Store } from "../../utils/Store";
 import Layout from "../../components/Layout";
+import AdminLeftPanel from "../../components/AdminLeftPanel";
 import useStyles from "../../utils/styles";
 
 const reducer = (state, action) => {
@@ -72,25 +73,7 @@ const AdminDashboard = () => {
     <Layout title="Admin Dashboard">
       <Grid container spacing={1}>
         <Grid item md={3} xs={12}>
-          <Card className={classes.section}>
-            <List>
-              <NextLink href="/admin/dashboard" passHref>
-                <ListItem selected button components="a">
-                  <ListItemText primary="Admin Dashboard" />
-                </ListItem>
-              </NextLink>
-              <NextLink href="/admin/orders" passHref>
-                <ListItem button components="a">
-                  <ListItemText primary="Orders" />
-                </ListItem>
-              </NextLink>
-              <NextLink href="/admin/products" passHref>
-                <ListItem button component="a">
-                  <ListItemText primary="Products"></ListItemText>
-                </ListItem>
-              </NextLink>
-            </List>
-          </Card>
+          <AdminLeftPanel selectedTarget="SELECT_DASHBOARD" />
         </Grid>
 
         <Grid item md={9} xs={12}>
