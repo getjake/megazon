@@ -15,20 +15,55 @@ import {
   Button,
   Menu,
   MenuItem,
+  Box,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  Divider,
+  ListItemText,
 } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { createTheme } from "@mui/material/styles";
 import { useState } from "react";
 import { useRouter } from "next/router";
-
+import { getError } from "../utils/error";
 import useStyles from "../utils/styles";
 import { Store } from "../utils/Store";
 import Cookies from "js-cookie";
+import { useSnackbar } from "notistack";
+import axios from "axios";
 
 const Layout = ({ title, description, children }) => {
-  const router = useRouter()
+  const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const { darkMode, cart, userInfo } = state;
 
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+  const sidebarOpenHandler = () => {
+    setSidebarVisible(true);
+  };
+  const sidebarCloseHandler = () => {
+    setSidebarVisible(false);
+  };
+
+  const [categories, setCategories] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const fetchCategories = async () => {
+    try {
+      const { data } = await axios.get(`/api/products/categories`);
+      setCategories(data);
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: "error" });
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+  
   const theme = createTheme({
     typography: {
       h1: {
@@ -60,23 +95,23 @@ const Layout = ({ title, description, children }) => {
     Cookies.set("darkMode", newDarkMode ? "ON" : "OFF");
   };
 
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState(null);
   const loginClickHandler = (e) => {
-    setAnchorEl(e.currentTarget)
-  }
+    setAnchorEl(e.currentTarget);
+  };
 
   const loginMenuCloseHandler = (e, redirect) => {
-    setAnchorEl(null)
-    if(redirect) {
-      router.push(redirect)
+    setAnchorEl(null);
+    if (redirect) {
+      router.push(redirect);
     }
-  }
+  };
 
   const logoutClickHandler = () => {
-    setAnchorEl(null)
-    dispatch({type: 'USER_LOGOUT'});
-    router.push('/')
-  }
+    setAnchorEl(null);
+    dispatch({ type: "USER_LOGOUT" });
+    router.push("/");
+  };
 
   return (
     <div>
@@ -88,24 +123,54 @@ const Layout = ({ title, description, children }) => {
         </Head>
 
         <AppBar position="static" className={classes.navBar}>
-          <Toolbar>
-            <NextLink href="/" passHref>
-              <Link>
-                <Typography className={classes.brand}>Megazon</Typography>
-              </Link>
-            </NextLink>
+          <Toolbar className={classes.toolbar}>
+            <Box display="flex" alignItems="center">
+              <IconButton edge="start" aria-label="open drawer" onClick={sidebarOpenHandler}>
+                <MenuIcon className={classes.navbarButton} />
+              </IconButton>
+              <NextLink href="/" passHref>
+                <Link>
+                  <Typography className={classes.brand}>megazon</Typography>
+                </Link>
+              </NextLink>
+            </Box>
+
+            <Drawer anchor="left" open={sidebarVisible} onClose={sidebarCloseHandler}>
+              <List>
+                <ListItem>
+                  <Box display="flex" alignItems="center" justifyContent="space-between">
+                    <Typography>Shopping by category</Typography>
+                    <IconButton aria-label="close" onClick={sidebarCloseHandler}>
+                      <CancelIcon />
+                    </IconButton>
+                  </Box>
+                </ListItem>
+
+                <Divider light />
+                {categories.map((category) => (
+                  <NextLink key={category} href={`/search?category=${category}`} passHref>
+                    <ListItem button component="a" onClick={sidebarCloseHandler}>
+                      <ListItemText primary={category} />
+                    </ListItem>
+                  </NextLink>
+                ))}
+              </List>
+            </Drawer>
+
             <div className={classes.grow}></div>
             <div>
               <Switch checked={darkMode} onChange={darkModeChangeHandler}></Switch>
               <NextLink href="/cart" passHref>
                 <Link>
-                  {cart.cartItems.length > 0 ? (
-                    <Badge color="secondary" badgeContent={cart.cartItems.length}>
-                      Cart
-                    </Badge>
-                  ) : (
-                    "Cart"
-                  )}
+                  <Typography component="span">
+                    {cart.cartItems.length > 0 ? (
+                      <Badge color="secondary" badgeContent={cart.cartItems.length}>
+                        Cart
+                      </Badge>
+                    ) : (
+                      "Cart"
+                    )}
+                  </Typography>
                 </Link>
               </NextLink>
 
@@ -126,19 +191,25 @@ const Layout = ({ title, description, children }) => {
                     open={Boolean(anchorEl)}
                     onClose={loginMenuCloseHandler}
                   >
-                    <MenuItem onClick={(e)=> loginMenuCloseHandler(e, '/profile')}>Profile</MenuItem>
-                    <MenuItem onClick={(e)=> loginMenuCloseHandler(e, '/order-history')}>Order History</MenuItem>
-                    {
-                      userInfo.isAdmin && (
-                        <MenuItem onClick={(e) => loginMenuCloseHandler(e, '/admin/dashboard')}>Admin Dashboard</MenuItem>
-                      )
-                    }
+                    <MenuItem onClick={(e) => loginMenuCloseHandler(e, "/profile")}>
+                      Profile
+                    </MenuItem>
+                    <MenuItem onClick={(e) => loginMenuCloseHandler(e, "/order-history")}>
+                      Order History
+                    </MenuItem>
+                    {userInfo.isAdmin && (
+                      <MenuItem onClick={(e) => loginMenuCloseHandler(e, "/admin/dashboard")}>
+                        Admin Dashboard
+                      </MenuItem>
+                    )}
                     <MenuItem onClick={logoutClickHandler}>Logout</MenuItem>
                   </Menu>
                 </>
               ) : (
                 <NextLink href="/login" passHref>
-                  <Link>Login</Link>
+                  <Link>
+                    <Typography component="span">Login</Typography>
+                  </Link>
                 </NextLink>
               )}
             </div>
