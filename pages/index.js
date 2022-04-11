@@ -12,6 +12,7 @@ import { useContext } from "react";
 import { Store } from "../utils/Store";
 import db from "../utils/db";
 import Product from "../models/Product";
+import ProductItem from "../components/ProductItem"
 
 export default function Home(props) {
   const router = useRouter();
@@ -36,28 +37,7 @@ export default function Home(props) {
       <Grid container spacing={3}>
         {products.map((product) => (
           <Grid item md={4} key={product.name}>
-            <Card>
-              <NextLink href={`/product/${product.slug}`} passHref>
-                <CardActionArea>
-                  <CardMedia
-                    component="img"
-                    image={product.image}
-                    title={product.name}
-                    alt={product.name}
-                  ></CardMedia>
-                  <CardContent>
-                    <Typography>{product.name}</Typography>
-                    <Rating value={product.rating} readOnly></Rating>
-                  </CardContent>
-                </CardActionArea>
-              </NextLink>
-              <CardActions>
-                <Typography>${product.price}</Typography>
-                <Button size="small" color="primary" onClick={() => addToCartHandler(product)}>
-                  Add to Cart
-                </Button>
-              </CardActions>
-            </Card>
+            <ProductItem  product={product} addToCartHandler={addToCartHandler} />
           </Grid>
         ))}
       </Grid>
