@@ -4,7 +4,7 @@ import styles from "../styles/Home.module.css";
 import NextLink from "next/link";
 import Layout from "../components/Layout";
 import { Grid, Card, CardActionArea, CardMedia, CardContent, CardActions } from "@mui/material";
-import Rating from '@mui/lab/Rating'
+import { Rating } from '@mui/material'
 import { Button, Typography } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
