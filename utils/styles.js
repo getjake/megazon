@@ -87,6 +87,9 @@ const useStyles = makeStyles((theme) => ({
       color: "#000000",
     },
   },
+  mt1: {
+    marginTop: '1rem'
+  }
 }));
 
 export default useStyles;
