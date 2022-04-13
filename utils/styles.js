@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
-    backgroundColor: "#203040",
+    backgroundColor: "#222831",
     "& a": {
       color: "#ffffff",
       marginLeft: 10,
@@ -89,6 +89,10 @@ const useStyles = makeStyles((theme) => ({
   },
   mt1: {
     marginTop: '1rem'
+  },
+  productItemButtom: {
+    display: 'flex',
+    justifyContent: "space-between",
   }
 }));
 

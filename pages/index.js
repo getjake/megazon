@@ -1,23 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
 import NextLink from "next/link";
 import Layout from "../components/Layout";
 import {
   Grid,
-  Card,
-  CardActionArea,
-  CardMedia,
-  CardContent,
-  CardActions,
   Link,
   Typography,
 } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useContext } from "react";
-import Carousel from "react-material-ui-carousel";
+// import Carousel from "react-material-ui-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
+import Image from "next/image";
 import useStyles from "../utils/styles";
 import { Store } from "../utils/Store";
 import db from "../utils/db";
@@ -44,7 +39,7 @@ export default function Home(props) {
 
   return (
     <Layout>
-      <Carousel className={classes.mt1} animation="slide">
+      <Carousel className={classes.mt1} Thumbs={false} showThumbs={false} >
         {featuredProducts.map((product) => (
           <NextLink key={product._id} href={`/product/${product.slug}`} passHref>
             <Link>

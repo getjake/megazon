@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Image from "next/image";
 import Rating from "@mui/material/Rating";
 import {
@@ -84,7 +84,7 @@ const ProductScreen = (props) => {
       <div className={classes.section}>
         <NextLink href="/" passHref>
           <Link>
-            <Typography>back to products</Typography>
+            <ArrowBackIcon />
           </Link>
         </NextLink>
       </div>
@@ -108,7 +108,7 @@ const ProductScreen = (props) => {
               </Typography>
             </ListItem>
             <ListItem>
-              <Typography>Category: {product.catagory}</Typography>
+              <Typography>Category: {product.category}</Typography>
             </ListItem>
             <ListItem>
               <Rating value={product.rating} readOnly />

@@ -11,8 +11,10 @@ import {
 
 import NextLink from "next/link";
 import Rating from "@mui/material/Rating";
+import useStyles from "../utils/styles";
 
 const ProductItem = ({ product, addToCartHandler }) => {
+  const classes = useStyles();
   return (
     <Card>
     <NextLink href={`/product/${product.slug}`} passHref>
@@ -28,7 +30,7 @@ const ProductItem = ({ product, addToCartHandler }) => {
         </CardContent>
       </CardActionArea>
     </NextLink>
-    <CardActions>
+    <CardActions className={classes.productItemButtom}>
       <Typography>${product.price}</Typography>
       <Button
         size="small"
